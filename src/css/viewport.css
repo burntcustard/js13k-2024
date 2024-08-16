@@ -1,0 +1,17 @@
+.viewport {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+
+  perspective: 10000px;
+
+  /* Prevent scrolling by touch in the viewport */
+  touch-action: none;
+}
+
+.viewport * {
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+}

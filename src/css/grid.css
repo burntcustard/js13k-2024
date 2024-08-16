@@ -1,0 +1,23 @@
+.grid {
+  pointer-events: all;
+  display: grid;
+  position: absolute;
+}
+
+/* Cell */
+.grid > * {
+  display: grid;
+  place-items: center;
+}
+
+/* Cell inner */
+.grid > * > * {
+  width: calc(100% - .8vmin);
+  height: calc(100% - .8vmin);
+  border: .6vmin solid #0001;
+  transition: border .2s;
+}
+
+.grid > *:hover > * {
+  border-color: #0009;
+}

@@ -1,0 +1,8 @@
+.scene {
+  display: grid;
+  place-items: center;
+  transform-origin: 0 0;
+  transform: rotateX(60deg) rotateZ(45deg);
+  /* This transition timing is for camera rotation */
+  transition: transform .4s;
+}

@@ -172,6 +172,7 @@ export function viteJs13k() {
       const cssAssets = Object.keys(bundle).filter((i) => i.endsWith(".css"));
       const jsAssets = Object.keys(bundle).filter((i) => jsExtensionTest.test(i));
       const bundlesToDelete = [];
+
       for (const name of htmlFiles) {
         const htmlChunk = bundle[name];
         let replacedHtml = htmlChunk.source;
@@ -184,8 +185,11 @@ export function viteJs13k() {
           }
         }
 
+        console.log('testHTML');
+
         for (const cssName of cssAssets) {
           const cssChunk = bundle[cssName];
+          console.log('testCSS');
           bundlesToDelete.push(cssName);
           replacedHtml = replaceCss(replacedHtml, cssChunk.fileName, cssChunk.source);
         }
@@ -194,6 +198,7 @@ export function viteJs13k() {
         htmlChunk.source = replacedHtml;
         await zip(replacedHtml);
       }
+
       for (const name of bundlesToDelete) {
           delete bundle[name];
       }
