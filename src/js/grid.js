@@ -1,7 +1,7 @@
 import { createElement } from "./create-element";
 
 export const cellCssSize = 20;
-const gridColRowCount = 13;  // Number of rows and columns in the grid
+const gridColRowCount = 5;  // Number of rows and columns in the grid
 const gridCssWidth = cellCssSize * gridColRowCount;
 const gridCssHeight = cellCssSize * gridColRowCount;
 
@@ -13,13 +13,12 @@ grid.style.grid = `repeat(${gridColRowCount}, ${cellCssSize}vmin) / repeat(${gri
 
 for (let i = 0; i < gridColRowCount * gridColRowCount; i++) {
   const cell = createElement();
-  const cellInner = createElement();
+  cell.classList.add('cell');
   cell.onpointerover = () => {
     // Move the currently selected tile here?
   };
   cell.onpointerout = () => {
     // Remove... stuff?
   };
-  cell.append(cellInner);
   grid.appendChild(cell);
 }

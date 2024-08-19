@@ -1,0 +1,21 @@
+.cell {
+  display: grid;
+  place-items: center;
+}
+
+.cell > * {
+  position: absolute;
+}
+
+.cell:before {
+  content: '';
+  position: absolute;
+  width: calc(100% - 2vmin);
+  height: calc(100% - 2vmin);
+  border: .6vmin solid #0001;
+  transition: border .2s;
+}
+
+.cell:hover:before {
+  border-color: #0009;
+}

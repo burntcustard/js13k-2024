@@ -1,6 +1,8 @@
 @import 'reset';
 @import 'body';
 @import 'camera';
+@import 'cell';
+@import 'cube';
 @import 'face';
 @import 'grid';
 @import 'scene';

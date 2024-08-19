@@ -1,3 +1,6 @@
 .face {
   backface-visibility: hidden;
+  /* Outline triggers anti-aliasing */
+  /* outline: 1px solid transparent; */
+  transform-style: flat !important;
 }
