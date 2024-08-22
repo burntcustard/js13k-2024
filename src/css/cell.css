@@ -12,10 +12,10 @@
   position: absolute;
   width: calc(100% - 2vmin);
   height: calc(100% - 2vmin);
-  border: .6vmin solid #0001;
+  border: .6vmin solid #0000;
   transition: border .2s;
 }
 
 .cell:hover:before {
-  border-color: #0009;
+  border-color: #0212;
 }
