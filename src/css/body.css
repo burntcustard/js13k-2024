@@ -1,6 +1,13 @@
 body {
   height: 100vh;
   margin: 0;
-  background: #310671;
   font-family: sans-serif;
+}
+
+body {
+  background: #102;
+}
+
+.grid {
+  background: #1029;
 }
