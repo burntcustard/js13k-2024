@@ -1,6 +1,7 @@
 import { createElement } from "./create-element";
 import { createSvgElement } from "./create-svg-element";
 import { cellCssSize } from "./grid";
+import { Cube } from "./cube";
 
 export class Tile {
   constructor(properties) {
@@ -17,6 +18,12 @@ export class Tile {
       segment.x = index % 2;
       segment.y = Math.floor(index / 2);
       segment.tile = this;
+    });
+
+    this.base = new Cube({
+      width: cellCssSize,
+      height: 1,
+      color: { h: 30, w: 90, b: 0 },
     });
 
     this.element = createElement();
