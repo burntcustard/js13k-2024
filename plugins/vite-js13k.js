@@ -109,7 +109,7 @@ function customReplacement(src) {
     // 'Highscore:' could be broken by this and must be fixed during the build
     .replace(/`[^`]+`/g, tag => tag
       .replace(/`\s+/, '`')  // Remove newlines & spaces at start or string
-      .replace(/\n\s+/g, '') // Remove newlines & spaces within values
+      .replace(/\n\s+/g, ' ') // Remove newlines & spaces within values (update: replace with spaces)
       .replace(/:\s+/g, ':')  // Remove spaces in between property & values
       .replace(/\,\s+/g, ',') // Remove space after commas
       .replace(/\s{/g, '{') // Remove space in between identifier & opening squigly

@@ -1,15 +1,22 @@
-import { Shape } from "../shape";
+import { Shape } from "./shape";
 import { createElement } from "./create-element";
+import { settings } from "./settings";
+
+const faceOverlapPx = .5;
+const shadowOverlapPx = 0;
+
+const shadowBlur = .15;
+const shadowAlpha = .2;
 
 export class Cube extends Shape {
   constructor(properties) {
     super({
       ...properties,
-      width: properties.width,
-      height: properties.height ?? properties.width,
-      depth: properties.depth ?? properties.width,
-      color: properties.color ?? { h: 0, w: 100, b: 0 }, // color: { h, w, b }?
     });
+
+    this.width = properties.width;
+    this.height = properties.height ?? properties.width;
+    this.depth = properties.depth ?? properties.width;
   }
 
   draw() {
@@ -23,31 +30,47 @@ export class Cube extends Shape {
 
     for (let i = 0; i < 5; i++) {
       const face = createElement();
-      face.style.classList.add('face')
+      face.classList.add('face')
       this.faces.push(face);
       this.element.append(face);
     }
 
-    // Same as the size of the parent element
-    this.faces[0].style.width = `${this.depth}vmin`;
-    this.faces[0].style.height = `${this.width}vmin`;
+    this.faces[0].style.background = `hwb(${this.color.h} ${this.color.w -  3} ${this.color.b +  3})`; // Top
+    this.faces[1].style.background = `hwb(${this.color.h} ${this.color.w - 25} ${this.color.b + 25})`; // N (top left)
+    this.faces[2].style.background = `hwb(${this.color.h} ${this.color.w -  5} ${this.color.b +  5})`; // E (top right)
+    this.faces[3].style.background = `hwb(${this.color.h} ${this.color.w -  0} ${this.color.b +  0})`; // S (bottom right)
+    this.faces[4].style.background = `hwb(${this.color.h} ${this.color.w - 15} ${this.color.b + 15})`; // W (bottom left)
 
-    // 4 "sides" of the cube
-    this.faces[1].style.transform = `rotateY(-90deg) rotateZ(90deg) translateY(${this.height / 2}vmin) translateZ(${this.width / 2}vmin)`;
-    this.faces[2].style.transform = `rotateX(90deg) translateY(-${this.height / 2}vmin) translateZ(${this.width / 2}vmin)`;
-    this.faces[3].style.transform = `rotateX(-90deg) rotateY(90deg) translateY(${this.height / 2}vmin) translateZ(${this.width / 2}vmin)`;
-    this.faces[4].style.transform = `rotateX(-90deg) translateY(${this.height / 2}vmin) translateZ(${this.width / 2}vmin)`;
+    this.shadowElements = createElement();
+    this.shadowElements.style.position = 'absolute';
+    this.shadowElements.style.inset = '0';
+    this.shadowElements.style.display = 'grid';
+    this.shadowElements.style.placeItems = 'center';
+    this.shadowElements.style.filter = `blur(${shadowBlur}vmin)`;
+    this.shadowElements.style.borderColor = `
+      #0000
+      #0000
+      hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha + .1})
+      hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha + .1})
+    `;
+    this.shadowElements.style.borderStyle = 'solid';
+    this.element.append(this.shadowElements);
 
-    // Color the top of the cube. TODO: Fancy lighting
-    this.faces[0].style.background = `hwb(${this.color.h} ${this.color.w} ${this.color.b + 10})`;
+    this.shadowElement1 = createElement('div');
+    this.shadowElement1.style.position = 'absolute';
+    this.shadowElement1.style.width = `${this.depth}vmin`;
+    this.shadowElement1.style.height = `${this.height}vmin`;
+    this.shadowElement1.style.background = `linear-gradient(hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha}), #0000)`;
+    this.shadowElements.append(this.shadowElement1);
 
-    this.faces[1].style.background = `hwb(${this.color.h} ${this.color.w} ${this.color.b + 25})`;
-    this.faces[2].style.background = `hwb(${this.color.h} ${this.color.w} ${this.color.b + 10})`;
-    this.faces[3].style.background = `hwb(${this.color.h} ${this.color.w} ${this.color.b +  0})`;
-    this.faces[4].style.background = `hwb(${this.color.h} ${this.color.w} ${this.color.b + 20})`;
+    this.shadowElement2 = createElement('div');
+    this.shadowElement2.style.position = 'absolute';
+    this.shadowElement2.style.width = `${this.width}vmin`;
+    this.shadowElement2.style.height = `${this.height}vmin`;
+    this.shadowElement2.style.background = `linear-gradient(hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha}), #0000)`;
+    this.shadowElements.append(this.shadowElement2);
 
-    // Create 4 shadow elements that display on the ground around the cube.
-    // 2 may not be rendered depending on the position of the sun?
+    this.render();
   }
 
   render() {
@@ -56,5 +79,34 @@ export class Cube extends Shape {
     // Update colours of the faces of the cube depending on lighting?
 
     // Update position/skew of shadows depending on lighting?
+    super.render();
+
+    // Same as the size of the parent element
+    this.faces[0].style.width = `calc(${this.depth}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[0].style.height = `calc(${this.width}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[0].style.transform = `translateZ(${this.height}vmin)`;
+
+    // 4 "sides" of the cube
+    this.faces[1].style.transform = `rotateY(-90deg) rotateZ(90deg) translateY(-${this.height / 2}vmin) translateZ(${this.depth / 2}vmin)`;
+    this.faces[1].style.width = `calc(${this.width}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[1].style.height = `calc(${this.height}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[2].style.transform = `rotateX(90deg) translateY(${this.height / 2}vmin) translateZ(${this.width / 2}vmin)`;
+    this.faces[2].style.width = `calc(${this.depth}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[2].style.height = `calc(${this.height}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[3].style.transform = `rotateX(-90deg) rotateY(90deg) translateY(-${this.height / 2}vmin) translateZ(${this.depth / 2}vmin)`;
+    this.faces[3].style.width = `calc(${this.width}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[3].style.height = `calc(${this.height}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[4].style.transform = `rotateX(-90deg) translateY(-${this.height / 2}vmin) translateZ(${this.width / 2}vmin)`;
+    this.faces[4].style.width = `calc(${this.depth}vmin + ${settings.faceOverlapPx}px)`;
+    this.faces[4].style.height = `calc(${this.height}vmin + ${settings.faceOverlapPx}px)`;
+
+    this.shadowElements.style.borderWidth = `calc(${shadowBlur}vmin + 1px)`;
+
+    this.shadowElements.style.boxShadow = `-${settings.faceOverlapPx}px ${settings.faceOverlapPx}px ${settings.faceOverlapPx}px hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha + .1}`;
+    this.shadowElements.scale = '.99';
+
+    this.shadowElement1.style.transform = `translateY(calc(${this.width / 2}vmin - ${shadowOverlapPx}px)) skewX(-45deg) translateY(${this.height / 2}vmin)`;
+
+    this.shadowElement2.style.transform = `rotateZ(90deg) translateY(calc(${this.depth / 2}vmin - ${shadowOverlapPx}px)) skewX(45deg) translateY(${this.height / 2}vmin)`;
   }
 }

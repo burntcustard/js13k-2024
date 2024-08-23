@@ -4,3 +4,7 @@
   /* outline: 1px solid transparent; */
   transform-style: flat !important;
 }
+
+body.antialias .face {
+  outline: 1px solid transparent;
+}

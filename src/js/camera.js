@@ -12,7 +12,7 @@ function Camera() {
 
   this.setPosition = () => {
     this.sceneElement.style.transform = `rotateX(${this.rx}deg) rotateZ(${this.rz}deg);`
-    this.cameraElement.style.transform = `translateZ(${3000 * Math.log(this.zoom - minZoom + 1)}px)`
+    this.cameraElement.style.transform = `translateZ(${2800 * Math.log(this.zoom - minZoom + 1)}px)`
   }
 
   this.changeZoom = (value) => {
