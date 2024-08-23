@@ -35,11 +35,11 @@ export class Cube extends Shape {
       this.element.append(face);
     }
 
-    this.faces[0].style.background = `hwb(${this.color.h} ${this.color.w -  3} ${this.color.b +  3})`; // Top
-    this.faces[1].style.background = `hwb(${this.color.h} ${this.color.w - 25} ${this.color.b + 25})`; // N (top left)
-    this.faces[2].style.background = `hwb(${this.color.h} ${this.color.w -  5} ${this.color.b +  5})`; // E (top right)
-    this.faces[3].style.background = `hwb(${this.color.h} ${this.color.w -  0} ${this.color.b +  0})`; // S (bottom right)
-    this.faces[4].style.background = `hwb(${this.color.h} ${this.color.w - 15} ${this.color.b + 15})`; // W (bottom left)
+    this.faces[0].style.background = `hwb(${this.color.h -  1} ${this.color.w -  2} ${this.color.b +  2})`; // Top
+    this.faces[1].style.background = `hwb(${this.color.h - 12} ${this.color.w - 24} ${this.color.b + 24})`; // N (top left)
+    this.faces[2].style.background = `hwb(${this.color.h -  3} ${this.color.w -  6} ${this.color.b +  6})`; // E (top right)
+    this.faces[3].style.background = `hwb(${this.color.h -  0} ${this.color.w -  0} ${this.color.b +  0})`; // S (bottom right)
+    this.faces[4].style.background = `hwb(${this.color.h -  8} ${this.color.w - 16} ${this.color.b + 16})`; // W (bottom left)
 
     this.shadowElements = createElement();
     this.shadowElements.style.position = 'absolute';
