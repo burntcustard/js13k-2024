@@ -1,10 +1,10 @@
 import { Shape } from "./shape";
 import { createElement } from "./create-element";
 import { settings } from "./settings";
+import { shade } from "./shade";
 
-const faceOverlapPx = .5;
 const shadowOverlapPx = 0;
-
+const shadowSkew = 50;
 const shadowBlur = .15;
 const shadowAlpha = .2;
 
@@ -35,12 +35,6 @@ export class Cube extends Shape {
       this.element.append(face);
     }
 
-    this.faces[0].style.background = `hwb(${this.color.h -  1} ${this.color.w -  2} ${this.color.b +  2})`; // Top
-    this.faces[1].style.background = `hwb(${this.color.h - 12} ${this.color.w - 24} ${this.color.b + 24})`; // N (top left)
-    this.faces[2].style.background = `hwb(${this.color.h -  3} ${this.color.w -  6} ${this.color.b +  6})`; // E (top right)
-    this.faces[3].style.background = `hwb(${this.color.h -  0} ${this.color.w -  0} ${this.color.b +  0})`; // S (bottom right)
-    this.faces[4].style.background = `hwb(${this.color.h -  8} ${this.color.w - 16} ${this.color.b + 16})`; // W (bottom left)
-
     this.shadowElements = createElement();
     this.shadowElements.style.position = 'absolute';
     this.shadowElements.style.inset = '0';
@@ -58,16 +52,10 @@ export class Cube extends Shape {
 
     this.shadowElement1 = createElement('div');
     this.shadowElement1.style.position = 'absolute';
-    this.shadowElement1.style.width = `${this.depth}vmin`;
-    this.shadowElement1.style.height = `${this.height}vmin`;
-    this.shadowElement1.style.background = `linear-gradient(hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha}), #0000)`;
     this.shadowElements.append(this.shadowElement1);
 
     this.shadowElement2 = createElement('div');
     this.shadowElement2.style.position = 'absolute';
-    this.shadowElement2.style.width = `${this.width}vmin`;
-    this.shadowElement2.style.height = `${this.height}vmin`;
-    this.shadowElement2.style.background = `linear-gradient(hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha}), #0000)`;
     this.shadowElements.append(this.shadowElement2);
 
     this.render();
@@ -81,6 +69,8 @@ export class Cube extends Shape {
     // Update position/skew of shadows depending on lighting?
     super.render();
 
+    // Note: any CSS being set that's the same as what's already set, isn't a perf issue.
+
     // Same as the size of the parent element
     this.faces[0].style.width = `calc(${this.depth}vmin + ${settings.faceOverlapPx}px)`;
     this.faces[0].style.height = `calc(${this.width}vmin + ${settings.faceOverlapPx}px)`;
@@ -90,7 +80,8 @@ export class Cube extends Shape {
     this.faces[1].style.transform = `rotateY(-90deg) rotateZ(90deg) translateY(-${this.height / 2}vmin) translateZ(${this.depth / 2}vmin)`;
     this.faces[1].style.width = `calc(${this.width}vmin + ${settings.faceOverlapPx}px)`;
     this.faces[1].style.height = `calc(${this.height}vmin + ${settings.faceOverlapPx}px)`;
-    this.faces[2].style.transform = `rotateX(90deg) translateY(${this.height / 2}vmin) translateZ(${this.width / 2}vmin)`;
+    this.faces[2].style.transform = `rotateX(-90deg) rotateY(180deg) translateY(-${this.height / 2}vmin) translateZ(${this.width / 2}vmin)`;
+    this.faces[2].style.transition = '.4s all';
     this.faces[2].style.width = `calc(${this.depth}vmin + ${settings.faceOverlapPx}px)`;
     this.faces[2].style.height = `calc(${this.height}vmin + ${settings.faceOverlapPx}px)`;
     this.faces[3].style.transform = `rotateX(-90deg) rotateY(90deg) translateY(-${this.height / 2}vmin) translateZ(${this.depth / 2}vmin)`;
@@ -100,13 +91,32 @@ export class Cube extends Shape {
     this.faces[4].style.width = `calc(${this.depth}vmin + ${settings.faceOverlapPx}px)`;
     this.faces[4].style.height = `calc(${this.height}vmin + ${settings.faceOverlapPx}px)`;
 
+    this.faces[0].darkness = 2;  // Top
+    this.faces[1].darkness = 22; // N (top left)
+    this.faces[2].darkness = 6;  // E (top right)
+    this.faces[3].darkness = 0;  // S (bottom right)
+    this.faces[4].darkness = 18; // W (bottom left)
+
+    if (!this.faces.pattern) {
+      this.faces.forEach(face => face.style.background = shade(this.color, face.darkness));
+    }
+
     this.shadowElements.style.borderWidth = `calc(${shadowBlur}vmin + 1px)`;
 
     this.shadowElements.style.boxShadow = `-${settings.faceOverlapPx}px ${settings.faceOverlapPx}px ${settings.faceOverlapPx}px hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha + .1}`;
     this.shadowElements.scale = '.99';
 
-    this.shadowElement1.style.transform = `translateY(calc(${this.width / 2}vmin - ${shadowOverlapPx}px)) skewX(-45deg) translateY(${this.height / 2}vmin)`;
+    this.shadowElement1.style.width = `${this.depth}vmin`;
+    this.shadowElement1.style.height = `calc(${this.height}vmin * cos(${shadowSkew}deg))`;
+    this.shadowElement1.style.background = `linear-gradient(hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha}), #0000)`;
+    this.shadowElement1.style.transform = `translateY(calc(${this.width / 2}vmin - ${shadowOverlapPx}px)) skewX(-${shadowSkew}deg) translateY(calc((${this.height}vmin * cos(${shadowSkew}deg) / 2)))`;
 
-    this.shadowElement2.style.transform = `rotateZ(90deg) translateY(calc(${this.depth / 2}vmin - ${shadowOverlapPx}px)) skewX(45deg) translateY(${this.height / 2}vmin)`;
+    // console.log(`calc(${this.height}vmin - (${this.width}vmin * tan(${45 - shadowSkew})))`);
+    const shadowSkewInvert = 90 - shadowSkew - .5;
+
+    this.shadowElement2.style.width = `${this.width}vmin`;
+    this.shadowElement2.style.height = `calc(${this.height}vmin * cos(${shadowSkewInvert}deg))`;
+    this.shadowElement2.style.background = `linear-gradient(hwb(${this.shadowColor.h} ${this.shadowColor.w} ${this.shadowColor.b} / ${shadowAlpha}), #0000)`;
+    this.shadowElement2.style.transform = `rotateZ(90deg) translateY(calc(${this.depth / 2}vmin - ${shadowOverlapPx}px)) skewX(${shadowSkewInvert}deg) translateY(calc((${this.height}vmin * cos(${shadowSkewInvert}deg) / 2)))`;
   }
 }
