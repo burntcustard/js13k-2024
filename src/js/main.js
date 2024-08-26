@@ -1,9 +1,10 @@
 import { GameLoop, fps } from './modified-kontra/game-loop';
-import { grid } from './grid';
+import { grid, cells, cellCssSize } from './grid';
 import initMouse from './mouse';
 import { camera } from './camera';
 import { RoadShopTile } from './tiles/road-shop';
 import { settings } from "./settings";
+import { createElement } from './create-element';
 
 let updateCount = 0;
 let renderCount = 0;
@@ -46,15 +47,45 @@ loop.start();
 const testTile = new RoadShopTile({
   x: 0,
   y: 0,
+  floating: 1,
 });
 
 testTile.draw();
 
-testTile.addTo(grid.children[12]);
+// testTile.addTo(grid.children[Math.floor((gridColRowCount * gridColRowCount) / 2)]);
 
 gameObjects.push(testTile);
 
+const floatyElement = createElement();
+floatyElement.style.position = 'absolute';
+floatyElement.style.transition = 'all .4s';
+floatyElement.style.transform = 'translateZ(10vmin)';
+floatyElement.style.pointerEvents = 'none';
+testTile.addTo(floatyElement);
+grid.appendChild(floatyElement);
+
 initMouse();
+
+cells.forEach(cell => {
+  cell.addEventListener('pointerover', () => {
+    const x = cellCssSize * cell.coords.x;
+    const y = cellCssSize * cell.coords.y;
+
+    floatyElement.style.left = `${x}vmin`;
+    floatyElement.style.top = `${y}vmin`;
+  });
+
+  cell.addEventListener('pointerdown', () => {
+    // floatyElement.style.transform = 'translateZ(9vmin)';
+    floatyElement.style.transform = 'translateZ(0)';
+    testTile.place();
+  });
+
+  cell.addEventListener('pointerup', () => {
+    floatyElement.style.transform = 'translateZ(10vmin)';
+    testTile.lift();
+  });
+});
 
 document.addEventListener('keydown', (event) => {
   console.log(event.key);

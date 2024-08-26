@@ -11,7 +11,9 @@ export class Shape {
     this.z = properties.z ?? 0;
     this.rotation = properties.rotation ?? 0;
     this.color = properties.color ?? { h: 0, w: 100, b: 0 }; // color: { h, w, b }?
-    this.shadowColor = properties.shadowColor ?? { h: 0, w: 0, b: 100 };
+    this.shadowColor = properties.shadowColor ?? { h: 0, w: 0, b: 100, a: .2 };
+    this.tile = properties.tile;
+    this.floating = properties.floating ?? 0;
   }
 
   shapeRender() {

@@ -1,6 +1,7 @@
 import { Cube } from "./cube";
 import { Building } from "./building";
 import { shade } from "./shade";
+import { settings } from "./settings";
 
 export class Shop extends Building {
   constructor(properties) {
@@ -18,11 +19,17 @@ export class Shop extends Building {
       x: this.x,
       y: this.y,
       z: this.z,
+      tile: properties.tile,
     });
   }
 
   draw() {
     this.model.draw();
+    this.render();
+  }
+
+  render() {
+    super.render();
 
     this.model.faces.forEach((face, index) => {
       // Don't do anything with the top face
@@ -33,7 +40,10 @@ export class Shop extends Building {
       const windowHwb = shade(this.windowColor, face.darkness * .8);
 
       face.style.background = `
-        linear-gradient(#0000, #0001),
+        linear-gradient(
+          #0000 ${this.model.height - settings.ao.size}vmin,
+          hwb(${this.model.shadowColor.h} ${this.model.shadowColor.w} ${this.model.shadowColor.b} / ${face.darkness / 100 * settings.ao.intensity})
+        ),
         linear-gradient(90deg,
           ${faceHwb} 1vmin,
           #0000 0 calc(50% - .5vmin),

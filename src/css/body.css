@@ -9,5 +9,7 @@ body {
 }
 
 .grid {
-  /* background: #1029; */
+  /* The transparency is how much the lighter-than-usual center of the grid affects things,  */
+  /* with 0 being barely at all, and f being a lot. */
+  background: radial-gradient(#cdc5, #bcb 50%);
 }

@@ -14,6 +14,7 @@ export class Tile {
     this.y = properties.y;
     this.rotation = properties.rotation ?? 0;
     this.segments = properties.segments;
+    this.floating = properties.floating ?? 0; // 0 or 1 so it can be used as a shadow multiplier
 
     this.segments.forEach((segment, index) => {
       segment.x = index % 2;
@@ -25,99 +26,31 @@ export class Tile {
       width: cellCssSize,
       height: 1,
       color: { h: 30, w: 90, b: 3 },
-      shadowColor: { h: 120, w: 0, b: 90 },
+      shadowColor: { h: 160, w: 0, b: 80, a: .2 },
+      shadowHeightMulti: 1.4,
+      aoIntensity: 3,
+      tile: this,
+      floating: this.floating,
     });
-
-    // this.base.element.append(this.svgElement);
 
     this.testShop = new Shop({
       x: -4,
       y: -4,
       z: 1,
+      tile: this,
     });
+  }
 
-    // const buildingCssWidth = 7;
-    // const buildingCssHeight = 9;
-    // const buildingScale = 1;
+  place() {
+    this.floating = 0;
+    this.base.floating = 0;
+    this.render();
+  }
 
-    // const buildingShadowElement = createElement();
-    // buildingShadowElement.style.background = `linear-gradient(#0005, #0000)`;
-    // buildingShadowElement.style.width = `${buildingCssWidth * 1.4}vmin`;
-    // buildingShadowElement.style.height = `${buildingScale * 10}vmin`;
-    // buildingShadowElement.style.position = 'absolute';
-    // buildingShadowElement.style.transform = `translateX(-8.4vmin) translateY(-1.3vmin) rotate(45deg)`;
-    // buildingShadowElement.style.filter = 'blur(.2vmin)';
-    // this.base.element.append(buildingShadowElement);
-
-    // // Test building
-    // this.building1 = createElement('div');
-    // this.building1.classList.add('cube');
-    // this.building1.style.width = `${buildingCssWidth}vmin`;
-    // this.building1.style.height = `${buildingCssWidth}vmin`;
-    // this.building1.style.background = 'hsl(40, 45%, 83%)';
-    // this.building1.style.transform = `translateX(-5vmin) translateY(-5vmin) translateZ(${buildingCssHeight}vmin)`; // Raise up by height of building
-    // this.building1.sides = [
-    //   createElement(),
-    //   createElement(),
-    //   createElement(),
-    //   createElement(),
-    // ];
-    // this.building1.sides.forEach(side => {
-    //   side.classList.add('face');
-    //   side.style.height = `${buildingCssHeight}vmin`;
-    //   this.building1.append(side);
-    // })
-    // this.base.element.append(this.building1);
-    // this.building1.sides[0].style.transform = `rotateY(-90deg) rotateZ(90deg) translateY(${buildingCssHeight / 2}vmin) translateZ(${buildingCssWidth / 2}vmin)`;
-    // this.building1.sides[1].style.transform = `rotateX(90deg) translateY(-${buildingCssHeight / 2}vmin) translateZ(${buildingCssWidth / 2}vmin)`;
-    // this.building1.sides[2].style.transform = `rotateX(-90deg) rotateY(90deg) translateY(${buildingCssHeight / 2}vmin) translateZ(${buildingCssWidth / 2}vmin)`;
-    // this.building1.sides[2].style.background = `
-    //   linear-gradient(
-    //     #0000,
-    //     #0001
-    //   ),
-    //   linear-gradient(90deg,
-    //     hsl(40, 45%, 85%) 1vmin,
-    //     #0000 0 calc(50% - .5vmin),
-    //     hsl(40, 45%, 85%) 0 calc(50% + .5vmin),
-    //     #0000 0 calc(100% - 1vmin),
-    //     hsl(40, 45%, 85%) 0
-    //   ),
-    //   linear-gradient(
-    //     hsl(40, 45%, 85%) 1vmin,
-    //     hsl(200, 20%, 80%) 0 2vmin,
-    //     hsl(40, 45%, 85%) 0 3vmin,
-    //     hsl(200, 20%, 80%) 0 4vmin,
-    //     hsl(40, 45%, 85%) 0 5vmin,
-    //     hsl(200, 20%, 80%) 0 6vmin,
-    //     hsl(40, 45%, 85%) 0
-    //   )
-    // `;
-
-    // this.building1.sides[3].style.transform = `rotateX(-90deg) translateY(${buildingCssHeight / 2}vmin) translateZ(${buildingCssWidth / 2}vmin)`;
-
-    // this.building1.sides[3].style.background = `
-    //   linear-gradient(
-    //     #0000,
-    //     #0001
-    //   ),
-    //   linear-gradient(90deg,
-    //     hsl(30, 30%, 70%) 1vmin,
-    //     #0000 0 calc(50% - .5vmin),
-    //     hsl(30, 30%, 70%) 0 calc(50% + .5vmin),
-    //     #0000 0 calc(100% - 1vmin),
-    //     hsl(30, 30%, 70%) 0
-    //   ),
-    //   linear-gradient(
-    //     hsl(30, 30%, 70%) 1vmin,
-    //     hsl(200, 5%, 55%) 0 2vmin,
-    //     hsl(30, 30%, 70%) 0 3vmin,
-    //     hsl(200, 5%, 55%) 0 4vmin,
-    //     hsl(30, 30%, 70%) 0 5vmin,
-    //     hsl(200, 5%, 55%) 0 6vmin,
-    //     hsl(30, 30%, 70%) 0
-    //   )
-    // `;
+  lift() {
+    this.floating = 1;
+    this.base.floating = 1;
+    this.render();
   }
 
   draw() {
