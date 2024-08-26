@@ -2,7 +2,13 @@
   backface-visibility: hidden;
   /* Outline triggers anti-aliasing */
   /* outline: 1px solid transparent; */
-  transform-style: flat !important;
+  /* transform-style: flat !important; */
+  display: grid;
+  place-items: center;
+}
+
+.face > * {
+  position: absolute;
 }
 
 body.antialias .face {

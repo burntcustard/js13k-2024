@@ -30,7 +30,7 @@ const loop = GameLoop({
   update() {
     updateCount++;
 
-    if (updateCount === 1) console.log(updateCount);
+    // if (updateCount === 1) console.log(updateCount);
 
     if (updateCount >= fps) updateCount = 0;
   },
@@ -52,37 +52,40 @@ const testTile = new RoadShopTile({
 
 testTile.draw();
 
-// testTile.addTo(grid.children[Math.floor((gridColRowCount * gridColRowCount) / 2)]);
-
 gameObjects.push(testTile);
 
 const floatyElement = createElement();
 floatyElement.style.position = 'absolute';
-floatyElement.style.transition = 'all .4s';
-floatyElement.style.transform = 'translateZ(10vmin)';
+floatyElement.style.transition = 'all .5s';
 floatyElement.style.pointerEvents = 'none';
 testTile.addTo(floatyElement);
 grid.appendChild(floatyElement);
 
 initMouse();
 
-cells.forEach(cell => {
-  cell.addEventListener('pointerover', () => {
-    const x = cellCssSize * cell.coords.x;
-    const y = cellCssSize * cell.coords.y;
+const x = cellCssSize * cells[Math.floor(cells.length / 2)].coords.x;
+const y = cellCssSize * cells[Math.floor(cells.length / 2)].coords.y;
 
-    floatyElement.style.left = `${x}vmin`;
-    floatyElement.style.top = `${y}vmin`;
-  });
+floatyElement.style.left = `${x}vmin`;
+floatyElement.style.top = `${y}vmin`;
+
+cells.forEach(cell => {
+  // cell.addEventListener('pointerover', () => {
+  //   const x = cellCssSize * cell.coords.x;
+  //   const y = cellCssSize * cell.coords.y;
+
+  //   floatyElement.style.left = `${x}vmin`;
+  //   floatyElement.style.top = `${y}vmin`;
+  // });
 
   cell.addEventListener('pointerdown', () => {
     // floatyElement.style.transform = 'translateZ(9vmin)';
-    floatyElement.style.transform = 'translateZ(0)';
+    // floatyElement.style.transform = 'translateZ(0)';
     testTile.place();
   });
 
   cell.addEventListener('pointerup', () => {
-    floatyElement.style.transform = 'translateZ(10vmin)';
+    // floatyElement.style.transform = 'translateZ(10vmin)';
     testTile.lift();
   });
 });

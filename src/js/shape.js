@@ -13,7 +13,8 @@ export class Shape {
     this.color = properties.color ?? { h: 0, w: 100, b: 0 }; // color: { h, w, b }?
     this.shadowColor = properties.shadowColor ?? { h: 0, w: 0, b: 100, a: .2 };
     this.tile = properties.tile;
-    this.floating = properties.floating ?? 0;
+    this.float = properties.float ?? 0;
+    this.parent = properties.parent ?? {};
   }
 
   shapeRender() {
@@ -42,5 +43,9 @@ export class Shape {
 
   render() {
     this.shapeRender();
+  }
+
+  update() {
+
   }
 }

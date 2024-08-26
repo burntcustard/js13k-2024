@@ -20,6 +20,7 @@ export class Shop extends Building {
       y: this.y,
       z: this.z,
       tile: properties.tile,
+      parent: properties.parent,
     });
   }
 

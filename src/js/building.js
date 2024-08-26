@@ -16,4 +16,9 @@ export class Building {
   render() {
     this.model.render();
   }
+
+  update() {
+    this.model.z = this.z;
+    this.model.update();
+  }
 }
