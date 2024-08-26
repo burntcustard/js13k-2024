@@ -129,10 +129,20 @@ export class Cube extends Shape {
     } else {
       if (this.parent.float) {
         this.shadowElements.style.transition = 'filter .5s, opacity .5s, transform .5s, clip-path .1s';
-        this.shadowElements.style.clipPath = `polygon(calc(${-((this.parent.width - this.width) / 2 + this.x)}vmin - .5px) 1px, calc(100% - .5px) 0, 100% 200%, calc(${-((this.parent.width - this.width) / 2 + this.x)}vmin - .5px) ${(this.parent.width + this.width) / 2 - this.y}vmin)`;
+        this.shadowElements.style.clipPath = `polygon(
+          calc(${-((this.parent.width - this.width) / 2 + this.x)}vmin - .5px) 1px,
+          calc(100% - 1px) 0,
+          100% 200%,
+          calc(${-((this.parent.width - this.width) / 2 + this.x)}vmin - .5px) ${(this.parent.width + this.width) / 2 - this.y}vmin)
+        `;
       } else {
         this.shadowElements.style.transition = 'filter .5s, opacity .5s, transform .5s, clip-path .3s .3s';
-        this.shadowElements.style.clipPath = 'polygon(-1000% 1px, calc(100% - 1px) 0, 100% 2000%, -1000% 2000%)';
+        this.shadowElements.style.clipPath = `polygon(
+          -1000% 1px,
+          calc(100% - 1px) 0,
+          100% 200%,
+          -1000% 2000%
+        )`;
       }
     }
     // this.shadowElements.style.clipPath = this.float ? '' : `polygon(0 1px, calc(100% - 1px) 0, 100% 200%, -100% 200%)`;
