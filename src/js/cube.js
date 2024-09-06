@@ -125,7 +125,7 @@ export class Cube extends Shape {
 
     if (this.float) {
       this.shadowElements.style.transition = 'filter .5s, opacity .5s, transform .5s, clip-path 0s'
-      this.shadowElements.style.clipPath = `polygon(0 0, 2000% -1000%, 2000% 2000%, -1000% 2000%)`;
+      // this.shadowElements.style.clipPath = `polygon(0 0, 2000% -1000%, 2000% 2000%, -1000% 2000%)`;
     } else {
       if (this.parent.float) {
         this.shadowElements.style.transition = 'filter .5s, opacity .5s, transform .5s, clip-path .1s';

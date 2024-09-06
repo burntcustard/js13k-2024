@@ -81,12 +81,12 @@ cells.forEach(cell => {
   cell.addEventListener('pointerdown', () => {
     // floatyElement.style.transform = 'translateZ(9vmin)';
     // floatyElement.style.transform = 'translateZ(0)';
-    testTile.place();
+    // testTile.place();
   });
 
   cell.addEventListener('pointerup', () => {
     // floatyElement.style.transform = 'translateZ(10vmin)';
-    testTile.lift();
+    // testTile.lift();
   });
 });
 
@@ -94,6 +94,6 @@ document.addEventListener('keydown', (event) => {
   console.log(event.key);
   if (event.key === 'ArrowRight') camera.rotateRight();
   if (event.key === 'ArrowLeft') camera.rotateLeft();
-  if (event.key === 'F1') toggleAntialiasing();
-  if (event.key === 'F2') toggleFaceOverlap();
+  if (event.key === 'a') toggleAntialiasing();
+  if (event.key === 'f') toggleFaceOverlap();
 });
